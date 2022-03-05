@@ -14,12 +14,8 @@ import matplotlib.pyplot as plt
 
 
 def set_spotipy_environment_variables(args):
-    if 'api_id' not in args or 'api_key' not in args or args['api_id'] == 'null' or args['api_key'] == 'null':
-        os.environ['SPOTIPY_CLIENT_ID'] = '62258476b44e4d2b857d7799be7987ed'
-        os.environ['SPOTIPY_CLIENT_SECRET'] = 'd2ab0f8b846e47e8beda57f9edfb9ca1'
-    else:
-        os.environ['SPOTIPY_CLIENT_ID'] = args['api_id']
-        os.environ['SPOTIPY_CLIENT_SECRET'] = args['api_key']
+    # Client IDs set as env variables
+    pass
 
 
 def spotify_login():
