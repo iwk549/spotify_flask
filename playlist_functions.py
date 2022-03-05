@@ -10,7 +10,6 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOauthError
 from statistics import mean
 from scipy.spatial import distance
-import matplotlib.pyplot as plt
 
 
 def set_spotipy_environment_variables(args):

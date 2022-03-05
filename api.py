@@ -9,10 +9,6 @@ CORS(app)
 app.config["DEBUG"] = True
 
 
-@app.route('/', methods=['GET'])
-def home():
-    return "<h1>Welcome</h1>"
-
 @app.route('/api/v1/healthz', methods={'GET'})
 def health_check():
     return "<p>Healthy</p>"
