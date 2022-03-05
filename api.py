@@ -13,6 +13,10 @@ app.config["DEBUG"] = True
 def home():
     return "<h1>Welcome</h1>"
 
+@app.route('/api/v1/healthz', methods={'GET'})
+def health_check():
+    return "<p>Healthy</p>"
+
 
 @app.route('/api/v1/spotify/artist', methods=["GET"])
 def api_spotify_artist():
