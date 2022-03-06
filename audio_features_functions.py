@@ -5,20 +5,16 @@ from sklearn import svm, preprocessing
 from sklearn.neighbors import KNeighborsClassifier
 import requests.exceptions as re
 import spotipy.exceptions as se
-import os
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOauthError
+from spotipy.oauth2 import SpotifyOauthError
 from statistics import mean
 from scipy.spatial import distance
+
+import spotify_functions
 
 
 def set_spotipy_environment_variables(args):
     # Client IDs set as env variables
     pass
-
-
-def spotify_login():
-    return spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
 
 def destructure_track_info(track):
@@ -65,46 +61,13 @@ def split_list(original_list, length=100):
     return new_list
 
 
-def get_artist_name(artist_id):
-    spotify = spotify_login()
-    try:
-        artist = spotify.artist(artist_id)
-    except (re.HTTPError, se.SpotifyException) as e:
-        return "Error: An invalid artist id was provided."
-    except SpotifyOauthError:
-        return 'Error: Invalid Login Credentials.'
-    return {
-        'name': artist['name'],
-        'followers': artist['followers']['total'],
-        'image': artist['images'][0]['url'],
-        'genres': artist['genres'],
-    }
-
-
-def get_playlist_name(playlist_id):
-    spotify = spotify_login()
-    try:
-        playlist = spotify.playlist(playlist_id, fields='followers,name,owner,tracks')
-    except (re.HTTPError, se.SpotifyException) as e:
-        return "Error: An invalid playlist id was provided."
-    except SpotifyOauthError:
-        return 'Error: Invalid Login Credentials.'
-    return {
-        'name': playlist['name'],
-        'followers': playlist['followers']['total'],
-        'owner': playlist['owner']['display_name'],
-        'owner_id': playlist['owner']['id'],
-        'tracks': len(playlist['tracks']['items'])
-    }
-
-
 def get_playlist_tracks_audio_features(playlist_array):
     """
     Get all the tracks from the provided playlists with audio features
     :param playlist_array: an array of playlist ids
     :return: pandas DataFrame of all tracks and audio features
     """
-    spotify = spotify_login()
+    spotify = spotify_functions.login()
     all_tracks = []
     audio_features = []
     for playlist_id in playlist_array:
@@ -140,7 +103,7 @@ def get_playlist_tracks_audio_features(playlist_array):
 
 
 def get_all_tracks_for_artist_audio_features(artist_id):
-    spotify = spotify_login()
+    spotify = spotify_functions.login()
     try:
         albums = spotify.artist_albums(artist_id)
     except (re.HTTPError, se.SpotifyException) as e:
@@ -187,7 +150,7 @@ def get_artist_top_tracks_audio_features(artist_id):
     :param artist_id: a single artist id
     :return: pandas DataFrame of top tracks and audio features
     """
-    spotify = spotify_login()
+    spotify = spotify_functions.login()
     try:
         top_tracks = spotify.artist_top_tracks(artist_id)
     except (re.HTTPError, se.SpotifyException) as e:
@@ -210,7 +173,7 @@ def get_artist_top_tracks_audio_features(artist_id):
 
 
 def get_single_track_audio_features(track_id):
-    spotify = spotify_login()
+    spotify = spotify_functions.login()
     try:
         track = spotify.track(track_id)
     except (re.HTTPError, se.SpotifyException) as e:
@@ -385,8 +348,8 @@ def playlist_probabilities(training_data, testing_data, estimator, x_columns, y_
             testing_data[each] = probabilities[x]
             x += 1
 
-    xx, yy, Z = get_contour_data(training_x, training_y, clf)
-
+    # xx, yy, Z = get_contour_data(training_x, training_y, clf)
+    xx, yy, Z = "", "", ""
     return [testing_data, xx, yy, Z]
 
 
