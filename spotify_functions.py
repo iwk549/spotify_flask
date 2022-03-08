@@ -2,8 +2,17 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOauthError
 import requests.exceptions as re
 import spotipy.exceptions as se
+import pprint
+
+
+def set_spotipy_environment_variables(args):
+    # Client IDs set as env variables
+    pass
+
 
 def login():
+    token = spotipy.oauth2.SpotifyClientCredentials().get_access_token()
+    print(token)
     return spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
 
@@ -26,7 +35,8 @@ def get_artist_name(artist_id):
 def get_playlist_name(playlist_id):
     spotify = login()
     try:
-        playlist = spotify.playlist(playlist_id, fields='followers,name,owner,tracks')
+        # playlist = spotify.playlist(playlist_id, fields='followers,name,owner,tracks')
+        playlist = spotify.playlist(playlist_id)
     except (re.HTTPError, se.SpotifyException) as e:
         return "Error: An invalid playlist id was provided."
     except SpotifyOauthError:
@@ -35,6 +45,5 @@ def get_playlist_name(playlist_id):
         'name': playlist['name'],
         'followers': playlist['followers']['total'],
         'owner': playlist['owner']['display_name'],
-        'owner_id': playlist['owner']['id'],
-        'tracks': len(playlist['tracks']['items'])
+        'owner_id': playlist['owner']['id']
     }

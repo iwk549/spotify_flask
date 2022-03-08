@@ -12,11 +12,6 @@ from scipy.spatial import distance
 import spotify_functions
 
 
-def set_spotipy_environment_variables(args):
-    # Client IDs set as env variables
-    pass
-
-
 def destructure_track_info(track):
     track_info = {}
     artists = ''
